@@ -80,7 +80,11 @@ const loginSlice = createSlice({
     },
     loginError: (state, action) => {
       state.success = false;
-      state.errors = action.payload;
+      if (Array.isArray(action.payload)) {
+        state.errors = action.payload;
+      } else {
+        state.errors = [action.payload];
+      }
     },
   },
   extraReducers: {},

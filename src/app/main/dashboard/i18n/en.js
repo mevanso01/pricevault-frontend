@@ -1,5 +1,5 @@
 const locale = {
-  TITLE: 'Example Page',
+  TITLE: 'Dashboard Page',
 };
 
 export default locale;

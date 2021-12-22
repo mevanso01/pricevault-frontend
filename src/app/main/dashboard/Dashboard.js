@@ -11,8 +11,8 @@ const Root = styled(FusePageSimple)({
   '& .FusePageSimple-sidebarContent': {},
 });
 
-function ExamplePage(props) {
-  const { t } = useTranslation('examplePage');
+function DashboardPage(props) {
+  const { t } = useTranslation('dashboardPage');
 
   return (
     <Root
@@ -37,4 +37,4 @@ function ExamplePage(props) {
   );
 }
 
-export default ExamplePage;
+export default DashboardPage;
