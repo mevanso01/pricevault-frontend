@@ -3,16 +3,18 @@ import { styled, darken } from '@mui/material/styles';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import JWTRegisterTab from './tabs/JWTRegisterTab';
+import { resetSlice } from 'app/auth/store/registerSlice';
+import { useDispatch } from 'react-redux';
 
 const Root = styled('div')(({ theme }) => ({
-  background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
-    theme.palette.primary.dark,
-    0.5
-  )} 100%)`,
-  color: theme.palette.primary.contrastText,
+  // background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
+  //   theme.palette.primary.dark,
+  //   0.5
+  // )} 100%)`,
+  // color: theme.palette.primary.contrastText,
 
   '& .Register-leftSection': {},
 
@@ -27,10 +29,15 @@ const Root = styled('div')(({ theme }) => ({
 
 function Register() {
   // const [selectedTab, setSelectedTab] = useState(0);
+  const dispatch = useDispatch();
 
   // function handleTabChange(event, value) {
   //   setSelectedTab(value);
   // }
+
+  useEffect(() => {
+    dispatch(resetSlice());
+  }, []);
 
   return (
     <Root className="flex flex-col flex-auto items-center justify-center flex-shrink-0 p-16 md:p-24">

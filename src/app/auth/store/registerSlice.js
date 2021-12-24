@@ -7,17 +7,19 @@ import { createUserSettingsFirebase, setUserData } from './userSlice';
 export const submitRegister =
   ({ displayName, password, email }) =>
   async (dispatch) => {
+    dispatch(setProgress(true));
     return jwtService
       .createUser({
         displayName,
         password,
         email,
       })
-      .then((user) => {
-        dispatch(setUserData(user));
+      .then(() => {
+        dispatch(setProgress(false));
         return dispatch(registerSuccess());
       })
       .catch((errors) => {
+        dispatch(setProgress(false));
         return dispatch(registerError(errors));
       });
   };
@@ -87,6 +89,7 @@ export const registerWithFirebase = (model) => async (dispatch) => {
 
 const initialState = {
   success: false,
+  progress: false,
   errors: [],
 };
 
@@ -106,10 +109,17 @@ const registerSlice = createSlice({
         state.errors = [action.payload];
       }
     },
+    resetSlice: (state, action) => {
+      state.success = false;
+      state.errors = [];
+    },
+    setProgress: (state, action) => {
+      state.progress = !!action.payload;
+    }
   },
   extraReducers: {},
 });
 
-export const { registerSuccess, registerError } = registerSlice.actions;
+export const { registerSuccess, registerError, resetSlice, setProgress } = registerSlice.actions;
 
 export default registerSlice.reducer;
