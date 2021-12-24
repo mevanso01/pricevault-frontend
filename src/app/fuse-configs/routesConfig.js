@@ -22,17 +22,17 @@ const routes = [
     path: '/',
     component: () => <Redirect to="/dashboard" />,
   },
+  // {
+  //   path: '/loading',
+  //   exact: true,
+  //   component: () => <FuseLoading />,
+  // },
+  // {
+  //   path: '/404',
+  //   component: () => <Error404Page />,
+  // },
   {
-    path: '/loading',
-    exact: true,
-    component: () => <FuseLoading />,
-  },
-  {
-    path: '/404',
-    component: () => <Error404Page />,
-  },
-  {
-    component: () => <Redirect to="/404" />,
+    component: () => <Redirect to="/dashboard" />,
   },
 ];
 
