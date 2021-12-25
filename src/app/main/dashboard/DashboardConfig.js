@@ -15,7 +15,7 @@ const DashboardConfig = {
       config: {},
     },
   },
-  auth: [ authRoles.admin, authRoles.user, authRoles.staff ],
+  auth: authRoles.user,
   routes: [
     {
       path: '/dashboard',

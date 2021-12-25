@@ -134,10 +134,14 @@ function JWTLoginTab(props) {
           color="primary"
           className="w-full mx-auto mt-16"
           aria-label="LOG IN"
-          disabled={_.isEmpty(dirtyFields) || !isValid}
+          disabled={_.isEmpty(dirtyFields) || !isValid || login.progress}
           value="legacy"
         >
-          Login
+          {
+            login.progress ?
+            'Please wait...':
+            'Login'
+          }
         </Button>
       </form>
     </div>
