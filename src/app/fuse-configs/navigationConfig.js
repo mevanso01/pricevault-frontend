@@ -8,22 +8,50 @@ i18next.addResourceBundle('tr', 'navigation', tr);
 i18next.addResourceBundle('ar', 'navigation', ar);
 
 const navigationConfig = [
+  // {
+  //   id: 'applications',
+  //   title: 'Applications',
+  //   translate: 'APPLICATIONS',
+  //   type: 'group',
+  //   icon: 'apps',
+  //   children: [
+  //     {
+  //       id: 'dashboard-component',
+  //       title: 'Dashboard',
+  //       translate: 'DASHBOARD',
+  //       type: 'item',
+  //       icon: 'whatshot',
+  //       url: '/dashboard',
+  //     },
+  //   ],
+  // },
   {
-    id: 'applications',
-    title: 'Applications',
-    translate: 'APPLICATIONS',
-    type: 'group',
-    icon: 'apps',
-    children: [
-      {
-        id: 'dashboard-component',
-        title: 'Dashboard',
-        translate: 'DASHBOARD',
-        type: 'item',
-        icon: 'whatshot',
-        url: '/dashboard',
-      },
-    ],
+    id: 'results',
+    title: 'Results',
+    type: 'item',
+    icon: 'assessment',
+    url: '/dashboard',
+  },
+  {
+    id: 'trade-repo',
+    title: 'Trade Repo',
+    type: 'item',
+    icon: 'folder',
+    url: '/repo',
+  },
+  {
+    id: 'submissions',
+    title: 'Submissions',
+    type: 'item',
+    icon: 'upload',
+    url: '/submissions',
+  },
+  {
+    id: 'users',
+    title: 'Users',
+    type: 'item',
+    icon: 'person',
+    url: '/users',
   },
 ];
 

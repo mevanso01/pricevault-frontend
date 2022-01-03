@@ -21,9 +21,9 @@ function Logo() {
     <Root className="flex items-center">
       <img className="logo-icon w-24 h-24" src="assets/images/logos/fuse.svg" alt="logo" />
       <Typography className="logo-text text-16 leading-none mx-12 font-medium" color="inherit">
-        FUSE
+        PriceVault
       </Typography>
-      <div
+      {/* <div
         className="badge flex items-center py-4 px-8 rounded"
         style={{ backgroundColor: '#121212', color: '#61DAFB' }}
       >
@@ -34,7 +34,7 @@ function Logo() {
           width="16"
         />
         <span className="react-text text-12 mx-4">React</span>
-      </div>
+      </div> */}
     </Root>
   );
 }
