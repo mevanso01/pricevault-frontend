@@ -1,9 +1,9 @@
 import i18next from 'i18next';
+import { authRoles } from 'app/auth';
 import Dashboard from './Dashboard';
 import en from './i18n/en';
 import tr from './i18n/tr';
 import ar from './i18n/ar';
-import { authRoles } from 'app/auth';
 
 i18next.addResourceBundle('en', 'dashboardPage', en);
 i18next.addResourceBundle('tr', 'dashboardPage', tr);

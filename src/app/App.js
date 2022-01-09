@@ -5,6 +5,7 @@ import history from '@history';
 import { Router } from 'react-router-dom';
 import { SnackbarProvider } from 'notistack';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 import rtlPlugin from 'stylis-plugin-rtl';
 import createCache from '@emotion/cache';
 import { CacheProvider } from '@emotion/react';
@@ -12,7 +13,6 @@ import { selectCurrLangDir } from 'app/store/i18nSlice';
 import withAppProviders from './withAppProviders';
 import { Auth } from './auth';
 
-import axios from 'axios';
 /**
  * Axios HTTP Request defaults
  */

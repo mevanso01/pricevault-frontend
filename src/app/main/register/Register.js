@@ -5,9 +5,9 @@ import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import JWTRegisterTab from './tabs/JWTRegisterTab';
 import { resetSlice } from 'app/auth/store/registerSlice';
 import { useDispatch } from 'react-redux';
+import JWTRegisterTab from './tabs/JWTRegisterTab';
 
 const Root = styled('div')(({ theme }) => ({
   // background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
