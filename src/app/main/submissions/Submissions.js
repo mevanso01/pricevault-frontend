@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import FileUploader from 'app/shared-components/FileUploader';
 
 const Root = styled(FusePageSimple)({
   '& .FusePageSimple-header': {display: 'none'},
-  '& .FusePageSimple-toolbar': {},
+  '& .FusePageSimple-toolbar': {justifyContent: 'center'},
   '& .FusePageSimple-content': {},
   '& .FusePageSimple-sidebarHeader': {},
   '& .FusePageSimple-sidebarContent': {},
@@ -18,7 +19,9 @@ function SubmissionsPage(props) {
     return (
         <Root
             contentToolbar={
-                <Box></Box>
+                <Typography variant="subtitle1" component="h6" mt={4}>
+                    Submit a CSV file of your own valuation
+                </Typography>
             }
             content={
                 <Box className="p-8">

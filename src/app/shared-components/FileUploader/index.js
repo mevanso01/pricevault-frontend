@@ -45,7 +45,7 @@ const FileUploader = (props) => {
                 accept='.csv' 
                 className='drag-drop-file-uploader w-full text-center p-32 border-2 border-dashed cursor-pointer'
             >
-                {'Drag & Drop files or click to select'}
+                {'Drag & Drop or Click to upload'}
             </DragAndDrop>
         </Box>
     );
