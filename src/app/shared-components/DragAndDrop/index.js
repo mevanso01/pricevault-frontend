@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const DragAndDrop = ({ onDrop, children, className, style }) => {
-    const [classname, setClassname] = useState('border-slate-400');
+    const [classname, setClassname] = useState('border-slate-400 text-gray-400');
 
     const handleDrop = (e) => {
         e.preventDefault();
@@ -17,13 +17,13 @@ const DragAndDrop = ({ onDrop, children, className, style }) => {
     const handleDragEnter = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        setClassname('border-black');
+        setClassname('border-black text-black');
     }
 
     const handleDragLeave = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        setClassname('border-slate-400');
+        setClassname('border-slate-400 text-gray-400');
     }
 
     const handleOnClick = (e) => {
