@@ -1,6 +1,7 @@
 import { Redirect } from 'react-router-dom';
 import FuseUtils from '@fuse/utils';
 import DashboardConfig from 'app/main/dashboard/DashboardConfig';
+import SubmissionsConfig from 'app/main/submissions/SubmissionsConfig';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/main/404/Error404Page';
 import LoginConfig from 'app/main/login/LoginConfig';
@@ -8,6 +9,7 @@ import RegisterConfig from 'app/main/register/RegisterConfig';
 
 const routeConfigs = [
   DashboardConfig,
+  SubmissionsConfig,
   LoginConfig,
   RegisterConfig
 ];
@@ -21,6 +23,11 @@ const routes = [
     exact: true,
     path: '/',
     component: () => <Redirect to="/dashboard" />,
+  },
+  {
+    exact: true,
+    path: '/submissions',
+    component: () => <Redirect to="/submissions" />,
   },
   // {
   //   path: '/loading',
