@@ -18,6 +18,12 @@ const HeatChart = (props) => {
 		stroke: {
 			width: 1
 		},
+        responsive: [
+            {
+                breakpoint: 1000,
+                options: {}
+            }
+        ],
 		plotOptions: {
             heatmap: {
                 shadeIntensity: 0.5,
@@ -71,7 +77,7 @@ const HeatChart = (props) => {
 
     return (
         <div className="area">
-            <ReactApexChart options={options} series={series} type="heatmap" width="500" />
+            <ReactApexChart options={options} series={series} type="heatmap" />
         </div>
     );
 }

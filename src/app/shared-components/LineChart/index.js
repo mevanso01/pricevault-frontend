@@ -83,7 +83,7 @@ const LineChart = (props) => {
 
     return (
         <div className='pb-8'>
-            <Chart options={options} series={series} width={500} height={320} />
+            <Chart options={options} series={series} height={320} />
         </div>
     );
 }

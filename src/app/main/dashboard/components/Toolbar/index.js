@@ -36,8 +36,8 @@ const Toolbar = (props) => {
     } = props;
 
     return (
-        <Stack direction="row" spacing={1}>
-            <Item className="pl-0">
+        <Stack direction="row" spacing={1} flexWrap={'wrap'}>
+            <Item className="md:pl-0">
                 <IconButton 
                     aria-label="refresh" 
                     size="small" 

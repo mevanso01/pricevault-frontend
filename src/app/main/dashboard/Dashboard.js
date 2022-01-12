@@ -61,30 +61,28 @@ function DashboardPage(props) {
 
     return (
         <Root
-            contentToolbar={
-                <Box>
-                    <Toolbar 
-                        currency={currency} 
-                        date={date}
-                        lookBack={lookBack}
-                        vols={vols}
-                        handleCurrencyChange={handleCurrencyChange} 
-                        handleDateChange={handleDateChange}
-                        handleLookBackChange={handleLookBackChange}
-                        handleVolsChange={handleVolsChange}
-                    />
-                </Box>
-            }
             content={
                 <Box>
+                    <Box className="mb-4">
+                        <Toolbar
+                            currency={currency} 
+                            date={date}
+                            lookBack={lookBack}
+                            vols={vols}
+                            handleCurrencyChange={handleCurrencyChange} 
+                            handleDateChange={handleDateChange}
+                            handleLookBackChange={handleLookBackChange}
+                            handleVolsChange={handleVolsChange}
+                        />
+                    </Box>
                     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border mx-0 w-full'>
-                        <Grid item md={6} sm={12}>
+                        <Grid item md={6} sm={12} className='w-full'>
                             <HeatChart 
                                 data={heatData} 
                                 title={`${currency}: Sum of ${vols} for all strikes`}
                             />
                         </Grid>
-                        <Grid item md={6} sm={12}>
+                        <Grid item md={6} sm={12} className='w-full'>
                             <HeatChart 
                                 data={heatData} 
                                 title={`Change since ${moment(date).format('DD MMM YYYY')}`}
@@ -101,13 +99,13 @@ function DashboardPage(props) {
                             </Box>
                             <TabPanel value="1" className="pr-0 w-full">
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border'>
-                                    <Grid item md={6} sm={12}>
+                                    <Grid item md={6} sm={12} className='w-full'>
                                         <HeatChart 
                                             data={heatData} 
                                             title={`${currency}: ${vols} for a strikes`}
                                         />
                                     </Grid>
-                                    <Grid item md={6} sm={12}>
+                                    <Grid item md={6} sm={12} className='w-full'>
                                         <HeatChart 
                                             data={heatData} 
                                             title={`Change since ${moment(date).format('DD MMM YYYY')}`}
@@ -117,7 +115,7 @@ function DashboardPage(props) {
                             </TabPanel>
                             <TabPanel value="2" className="pr-0 w-full">
                                 <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border'>
-                                    <Grid item xs={12}>
+                                    <Grid item xs={12} className='w-full'>
                                         <LineChart 
                                             data={stockData} 
                                             title={''}
