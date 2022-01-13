@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { CSVReader } from 'react-papaparse';
 
 const FileUploader = (props) => {
-    const { setCsvData } = props;
+    const { setCsvData, isReset } = props;
 
     const [styles, setStyles] = useState({
         borderColor: '#cfcece',
@@ -12,7 +12,6 @@ const FileUploader = (props) => {
     });
 
     const handleOnDrop = (data) => {
-        console.log(data);
         setCsvData(data);
     };
 
@@ -39,7 +38,6 @@ const FileUploader = (props) => {
     };
 
     const handleOnRemoveFile = (data) => {
-        console.log(data);
         setCsvData(data);
     };
 
@@ -60,6 +58,7 @@ const FileUploader = (props) => {
                 onDrop={handleOnDrop}
                 onError={handleOnError}
                 onRemoveFile={handleOnRemoveFile}
+                isReset={isReset}
                 config={papaparseOptions}
                 style={{
                     dropArea: {
