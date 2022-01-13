@@ -130,7 +130,6 @@ export const updateUserData = (user) => async (dispatch, getState) => {
 const initialState = {
   role: [], // guest
   data: {
-    id: '',
     displayName: '',
     email: ''
   }

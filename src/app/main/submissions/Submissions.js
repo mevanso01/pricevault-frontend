@@ -8,7 +8,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import Snackbar from '@mui/material/Snackbar';
 import FileUploader from 'app/shared-components/FileUploader';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
 
 const Root = styled(FusePageSimple)({
   '& .FusePageSimple-header': {display: 'none'},
@@ -19,8 +18,6 @@ const Root = styled(FusePageSimple)({
 });
 
 function SubmissionsPage(props) {
-    const user = useSelector(({ auth }) => auth.user);
-
     const [csvData, setCsvData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isReset, setIsReset] = useState(false);
@@ -38,8 +35,7 @@ function SubmissionsPage(props) {
             arr.push({
                 tradeId: +item.data.tradeid,
                 valuation: +item.data.valuation,
-                forward: +item.data.forward,
-                userId: user.data.id
+                forward: +item.data.forward
             });
         });
 
