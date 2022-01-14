@@ -5,8 +5,8 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
-import Snackbar from '@mui/material/Snackbar';
 import FileUploader from 'app/shared-components/FileUploader';
+import ToastrBar from 'app/shared-components/ToastrBar';
 import axios from 'axios';
 
 const Root = styled(FusePageSimple)({
@@ -17,13 +17,14 @@ const Root = styled(FusePageSimple)({
   '& .FusePageSimple-sidebarContent': {},
 });
 
-function SubmissionsPage(props) {
+const SubmissionsPage = (props) => {
     const [csvData, setCsvData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isReset, setIsReset] = useState(false);
     const [snackBar, setSnackBar] = useState({
         isOpen: false,
-        msg: ''
+        msg: '',
+        type: 'success'
     });
 
     const convertToPayload = (data) => {
@@ -42,33 +43,76 @@ function SubmissionsPage(props) {
         return arr;
     }
 
+    const getTradeIdPayload = (data) => {
+        var arr = [];
+        data.map(item => {
+            if(isNaN(item.data.tradeid) || isNaN(item.data.valuation))
+                return false;
+
+            arr.push(+item.data.tradeid);
+        });
+
+        return arr;
+    }
+
+    const checkDuplicatedTimeState = (payload) => {
+        return new Promise((resolve, reject) => {
+            axios
+                .post('/api/submission/checkTimeState', {
+                    items: JSON.stringify(payload)
+                })
+                .then((response) => {
+                    const { data } = response;
+                    if (data.success) {
+                        resolve(data.duplicates);
+                    } else {
+                        reject(data.errors);
+                    }
+                });
+        });
+    }
+
     const saveToDatabase = (payload) => {
         return new Promise((resolve, reject) => {
-        axios
-            .post('/api/submission', {
-                items: JSON.stringify(payload)
-            })
-            .then((response) => {
-                const { data } = response;
-                if (data.success) {
-                    resolve("Uploaded successfully!");
-                } else {
-                    reject(data.errors);
-                }
-            });
+            axios
+                .post('/api/submission', {
+                    items: JSON.stringify(payload)
+                })
+                .then((response) => {
+                    const { data } = response;
+                    if (data.success) {
+                        resolve("Uploaded successfully!");
+                    } else {
+                        reject(data.errors);
+                    }
+                });
         });
     };
 
-    const handleSaveClick = () => {
+    const handleSaveClick = async () => {
         if(!csvData) return false;
-        let payload = convertToPayload(csvData);
 
         setLoading(true);
+        let payload = convertToPayload(csvData);
+        let tradeIds = getTradeIdPayload(csvData)
+
+        // Check if duplicated data is in there
+        let duplicates = await checkDuplicatedTimeState(tradeIds);
+        console.log('duplicated items: ', duplicates)
+        if(duplicates > 0) {
+            if (!confirm("Valuation duplicates found for several trades. If you continue, you'll lose old values. Are you sure to proceed?")) {
+                setIsReset(prev => !prev);
+                setLoading(false);
+                return false;
+            }
+        }
+
         saveToDatabase(payload)
             .then((res) => {
                 console.log(res);
                 setSnackBar({
                     isOpen: true,
+                    type: 'success',
                     msg: res
                 });
             })
@@ -76,7 +120,8 @@ function SubmissionsPage(props) {
                 console.log(err);
                 setSnackBar({
                     isOpen: true,
-                    msg: 'err'
+                    type: 'error',
+                    msg: err[0]
                 });
             })
             .finally(() => {
@@ -91,6 +136,7 @@ function SubmissionsPage(props) {
         }
         setSnackBar({
             isOpen: false,
+            type: 'success',
             msg: ''
         });
     };
@@ -120,13 +166,11 @@ function SubmissionsPage(props) {
                             Save
                         </LoadingButton>
                     </Box>
-                    <Snackbar
-                        anchorOrigin={{vertical:'bottom', horizontal:'right'}}
+                    <ToastrBar
                         open={snackBar.isOpen}
-                        autoHideDuration={5000}
-                        onClose={handleSnackClose}
                         message={snackBar.msg}
-                        sx={{ bottom: { xs: 80 } }}
+                        severity={snackBar.type}
+                        handleClose={handleSnackClose}
                     />
                 </Box>
             }
