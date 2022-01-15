@@ -70,7 +70,7 @@ const FileUploader = (props) => {
             >
                 <Typography 
                     variant="subtitle2" 
-                    component="h6" 
+                    component="span" 
                     style={{color: styles.textColor}}
                 >
                     Drag & Drop or Click to upload.
