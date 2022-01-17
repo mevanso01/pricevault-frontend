@@ -1,3 +1,4 @@
+import authRoles from 'app/auth/authRoles';
 import i18next from 'i18next';
 import ar from './navigation-i18n/ar';
 import en from './navigation-i18n/en';
@@ -50,6 +51,7 @@ const navigationConfig = [
     id: 'users',
     title: 'Users',
     type: 'item',
+    auth: authRoles.admin,//['admin']
     icon: 'person',
     url: '/users',
   },
