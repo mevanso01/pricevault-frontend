@@ -7,12 +7,11 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoading } from 'app/store/fuse/submissionSlice';
+import { setLoading } from './../store/submissionSlice';
 
 import FileUploader from 'app/shared-components/FileUploader';
 import ToastrBar from 'app/shared-components/ToastrBar';
 import ConfirmModal from 'app/shared-components/ConfirmModal';
-
 
 const Root = styled(FusePageSimple)({
   '& .FusePageSimple-header': {display: 'none'},
@@ -24,7 +23,7 @@ const Root = styled(FusePageSimple)({
 
 const SubmissionsPage = (props) => {
     const dispatch = useDispatch();
-    const loading = useSelector(({ fuse }) => fuse.submission.loading);
+    const loading = useSelector(({ main }) => main.submission.loading);
 
     const [csvData, setCsvData] = useState(null);
     const [isReset, setIsReset] = useState(false);

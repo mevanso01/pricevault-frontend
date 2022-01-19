@@ -38,7 +38,7 @@ const navigationConfig = [
     title: 'Trade Repo',
     type: 'item',
     icon: 'folder',
-    url: '/repo',
+    url: '/trades',
   },
   {
     id: 'submissions',

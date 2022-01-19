@@ -1,6 +1,7 @@
 import { Redirect } from 'react-router-dom';
 import FuseUtils from '@fuse/utils';
 import DashboardConfig from 'app/main/dashboard/DashboardConfig';
+import TradesConfig from 'app/main/trades/TradesConfig';
 import SubmissionsConfig from 'app/main/submissions/SubmissionsConfig';
 import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/main/404/Error404Page';
@@ -9,6 +10,7 @@ import RegisterConfig from 'app/main/register/RegisterConfig';
 
 const routeConfigs = [
   DashboardConfig,
+  TradesConfig,
   SubmissionsConfig,
   LoginConfig,
   RegisterConfig
@@ -23,6 +25,11 @@ const routes = [
     exact: true,
     path: '/',
     component: () => <Redirect to="/dashboard" />,
+  },
+  {
+    exact: true,
+    path: '/trades',
+    component: () => <Redirect to="/trades" />,
   },
   {
     exact: true,
