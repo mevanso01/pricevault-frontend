@@ -24,7 +24,6 @@ import ConfirmModal from 'app/shared-components/ConfirmModal';
 import AssetsItem from './components/AssetsItem';
 import InstrumentsItem from './components/InstrumentsItem';
 
-import { getAssets } from '../store/assetsSlice';
 import { getInstruments } from '../store/instrumentsSlice';
 
 const Root = styled(FusePageSimple)({
@@ -53,7 +52,6 @@ const TradesPage = (props) => {
     const [instrumentId, setInstrumentId] = useState('');
 
     useEffect(async () => {
-        await dispatch(getAssets());
         await dispatch(getInstruments());
     }, [dispatch]);
 
@@ -92,7 +90,7 @@ const TradesPage = (props) => {
                 collateralConvention: item.data.collateralconvention,
                 settlementType: item.data.settlementtype,
                 priceConvention: item.data.priceconvention,
-                strikeFixed: item.data.strikefixed,
+                strikeFixed: +item.data.strikefixed,
                 exerciseType: item.data.exercisetype,
                 swapFixedDCC: item.data.swapfixeddcc,
                 swapFixedFrequency: item.data.swapfixedfrequency,
@@ -261,9 +259,15 @@ const TradesPage = (props) => {
                                                         label="Instrument Type *"
                                                         onChange={handleChangeInstrumentId}
                                                     >
-                                                        {instruments.map(item => (
-                                                            <MenuItem key={item._id} value={item._id}>{item.name}</MenuItem>
-                                                        ))}
+                                                        {instruments.map(item => {
+                                                            const infoArray = [];
+                                                            if(item.name) infoArray.push(item.name);
+                                                            if(item.currency) infoArray.push(item.currency);
+                                                            if(item.serviceFrequency) infoArray.push(item.serviceFrequency);
+                                                            return (
+                                                                <MenuItem key={item._id} value={item._id}>{infoArray.join(', ')}</MenuItem>
+                                                            )
+                                                        })}
                                                     </Select>
                                                 </FormControl>
                                             </Box>

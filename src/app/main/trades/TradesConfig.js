@@ -15,7 +15,7 @@ const TradesConfig = {
       config: {},
     },
   },
-  auth: authRoles.user,
+  auth: authRoles.admin,
   routes: [
     {
       path: '/trades',

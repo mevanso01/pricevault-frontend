@@ -2,10 +2,14 @@ import { createSlice, createAsyncThunk, createEntityAdapter } from '@reduxjs/too
 import axios from 'axios';
 
 export const getAssets = createAsyncThunk('main/asset/getAssets', async () => {
-  const response = await axios.get('/api/asset');
-  const data = await response.data;
+  try {
+    const response = await axios.get('/api/asset');
+    const data = await response.data;
 
-  return data.items;
+    return data.items;
+  } catch(err) {
+    console.log(err);
+  }
 });
 
 export const createAsset = createAsyncThunk(

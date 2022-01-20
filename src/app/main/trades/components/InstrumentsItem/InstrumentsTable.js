@@ -179,6 +179,22 @@ const InstrumentsTable = (props) => {
                     <TableCell className="p-4 md:p-16" component="th" scope="row">
                       {n.name}
                     </TableCell>
+
+                    <TableCell className="p-4 md:p-16" component="th" scope="row">
+                      {n.currency}
+                    </TableCell>
+
+                    <TableCell className="p-4 md:p-16" component="th" scope="row">
+                      {n.serviceFrequency}
+                    </TableCell>
+
+                    <TableCell className="p-4 md:p-16" component="th" scope="row">
+                      {n.pricingTZ}
+                    </TableCell>
+                    
+                    <TableCell className="p-4 md:p-16" component="th" scope="row">
+                      {n.pricingTime}
+                    </TableCell>
                   </TableRow>
                 );
               })}

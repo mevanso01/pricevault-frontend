@@ -77,7 +77,7 @@ const AssetForm = (props) => {
           className="whitespace-nowrap mx-4"
           variant="contained"
           color="secondary"
-          disabled={_.isEmpty(dirtyFields) || !isValid || loading} 
+          disabled={!isValid || loading} 
           onClick={handleSaveAsset}
         >
           Save
