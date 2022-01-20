@@ -30,9 +30,9 @@ const schema = yup.object().shape({
   pricingTZ: yup
     .string()
     .required('You must select a Pricing TZ.'),
-  // pricingTime: yup
-  //   .string()
-  //   .required('You must select a currency.'),
+  pricingTime: yup
+    .string()
+    .required('You must select a currency.'),
   assetId: yup
     .string()
     .required('You must select a Asset.')
@@ -48,7 +48,7 @@ const InstrumentForm = (props) => {
 
   const methods = useForm({
     mode: 'onChange',
-    defaultValues: {},
+    defaultValues: item,
     resolver: yupResolver(schema),
   });
 
@@ -96,7 +96,6 @@ const InstrumentForm = (props) => {
                 variant="outlined"
                 fullWidth
                 autoComplete='off'
-                defaultValue={item ? item.name : ''}
               />
             )}
           />
@@ -105,7 +104,6 @@ const InstrumentForm = (props) => {
           <Controller
             control={control}
             name="currency"
-            defaultValue={item ? item.currency : ''}
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="currency-select-label">{'Currency *'}</InputLabel>
@@ -128,7 +126,6 @@ const InstrumentForm = (props) => {
           <Controller
             control={control}
             name="serviceFrequency"
-            defaultValue={item ? item.serviceFrequency : ''}
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="service-select-label">{'ServiceFrequency *'}</InputLabel>
@@ -151,7 +148,6 @@ const InstrumentForm = (props) => {
           <Controller
             control={control}
             name="pricingTZ"
-            defaultValue={item ? item.pricingTZ : ''}
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="pricingTZ-select-label">{'Pricing TZ *'}</InputLabel>
@@ -181,7 +177,6 @@ const InstrumentForm = (props) => {
                 id="pricingTime"
                 label="Pricing Time"
                 type="time"
-                defaultValue={item ? item.pricingTime : '00:00'}
                 className="mb-8"
                 InputLabelProps={{
                   shrink: true,
@@ -198,7 +193,6 @@ const InstrumentForm = (props) => {
           <Controller
             control={control}
             name="assetId"
-            defaultValue={(item) ? item.assetId : ''}
             render={({ field }) => (
               <FormControl fullWidth>
                 <InputLabel id="assetId-select-label">{'Asset *'}</InputLabel>
@@ -226,7 +220,7 @@ const InstrumentForm = (props) => {
           className="whitespace-nowrap mx-4"
           variant="contained"
           color="secondary"
-          disabled={!isValid || loading} 
+          disabled={_.isEmpty(dirtyFields) || !isValid || loading} 
           onClick={handleSaveInstrument}
         >
           Save

@@ -27,7 +27,7 @@ const AssetForm = (props) => {
 
   const methods = useForm({
     mode: 'onChange',
-    defaultValues: {},
+    defaultValues: item,
     resolver: yupResolver(schema),
   });
 
@@ -67,7 +67,6 @@ const AssetForm = (props) => {
             variant="outlined"
             fullWidth
             autoComplete='off'
-            defaultValue={item ? item.name : ''}
           />
         )}
       />
@@ -77,7 +76,7 @@ const AssetForm = (props) => {
           className="whitespace-nowrap mx-4"
           variant="contained"
           color="secondary"
-          disabled={!isValid || loading} 
+          disabled={_.isEmpty(dirtyFields) || !isValid || loading} 
           onClick={handleSaveAsset}
         >
           Save

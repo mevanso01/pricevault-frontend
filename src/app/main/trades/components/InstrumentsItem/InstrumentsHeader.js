@@ -73,7 +73,7 @@ const InstrumentsHeader = (props) => {
           color="secondary"
           onClick={() => openNewInstrumentModal()}
         >
-          <span className="hidden sm:flex">Add New Instrument Type</span>
+          <span className="hidden sm:flex">Add New</span>
           <span className="flex sm:hidden">New</span>
         </Button>
       </motion.div>

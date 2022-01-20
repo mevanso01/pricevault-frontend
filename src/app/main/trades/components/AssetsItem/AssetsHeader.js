@@ -73,7 +73,7 @@ const AssetsHeader = (props) => {
           color="secondary"
           onClick={() => openNewAssetModal()}
         >
-          <span className="hidden sm:flex">Add New Asset</span>
+          <span className="hidden sm:flex">Add New</span>
           <span className="flex sm:hidden">New</span>
         </Button>
       </motion.div>
