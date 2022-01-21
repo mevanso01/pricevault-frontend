@@ -15,14 +15,13 @@ import InputLabel from '@mui/material/InputLabel';
 import SaveIcon from '@mui/icons-material/Save';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoading } from '../store/tradeSlice';
+import { showMessage } from 'app/store/fuse/messageSlice';
+import { getInstruments } from '../store/instrumentsSlice';
 
 import FileUploader from 'app/shared-components/FileUploader';
-import ToastrBar from 'app/shared-components/ToastrBar';
 import ConfirmModal from 'app/shared-components/ConfirmModal';
 import AssetsItem from './components/AssetsItem';
 import InstrumentsItem from './components/InstrumentsItem';
-
-import { getInstruments } from '../store/instrumentsSlice';
 
 const TradeAdmin = () => {
   const dispatch = useDispatch();
@@ -33,13 +32,22 @@ const TradeAdmin = () => {
   const [tabIndex, setTabIndex] = useState('1');
   const [csvData, setCsvData] = useState(null);
   const [isReset, setIsReset] = useState(false);
-  const [snackBar, setSnackBar] = useState({
-    isOpen: false,
-    msg: '',
-    type: 'success'
-  });
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [instrumentId, setInstrumentId] = useState('');
+
+  const toggleSnackBar = (type, msg) => {
+    dispatch(
+      showMessage({
+        message: msg, //text or html
+        autoHideDuration: 6000, //ms
+        anchorOrigin: {
+          vertical  : 'top', //top bottom
+          horizontal: 'right' //left center right
+        },
+        variant: type //success error info warning null
+      })
+    );
+  }
 
   useEffect(async () => {
     await dispatch(getInstruments());
@@ -47,11 +55,7 @@ const TradeAdmin = () => {
 
   useEffect(() => {
     if(msg){
-      setSnackBar({
-        isOpen: true,
-        msg: msg,
-        type: 'error'
-      })
+      toggleSnackBar('error', msg);
     }
   }, [msg]);
 
@@ -151,20 +155,12 @@ const TradeAdmin = () => {
       // Save into database
       let payload = getTradePayload(csvData);
       let saved = await saveToDatabase(payload);
-      setSnackBar({
-        isOpen: true,
-        type: 'success',
-        msg: saved
-      });
+      toggleSnackBar('success', saved);
       setIsReset(prev => !prev);
       setInstrumentId('');
       dispatch(setLoading(false));
     } catch (err) {
-      setSnackBar({
-        isOpen: true,
-        type: 'error',
-        msg: err[0]
-      });
+      toggleSnackBar('error', err[0]);
       setIsReset(prev => !prev);
       setInstrumentId('');
       dispatch(setLoading(false));
@@ -178,34 +174,15 @@ const TradeAdmin = () => {
       // Save into database
       let payload = getTradePayload(csvData);
       let saved = await saveToDatabase(payload);
-      setSnackBar({
-        isOpen: true,
-        type: 'success',
-        msg: saved
-      });
+      toggleSnackBar('success', saved);
     } catch (err) {
-      setSnackBar({
-        isOpen: true,
-        type: 'error',
-        msg: err[0]
-      });
+      toggleSnackBar('error', err[0]);
     } finally {
       setIsReset(prev => !prev);
       setInstrumentId('');
       dispatch(setLoading(false));
     }
   }
-
-  const handleSnackClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setSnackBar({
-      isOpen: false,
-      type: 'success',
-      msg: ''
-    });
-  };
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='mt-8 mx-0 w-full'>
@@ -272,13 +249,6 @@ const TradeAdmin = () => {
           </Grid>
         </TabPanel>
       </TabContext>
-
-      <ToastrBar
-        open={snackBar.isOpen}
-        message={snackBar.msg}
-        severity={snackBar.type}
-        handleClose={handleSnackClose}
-      />
       
       <ConfirmModal
         title={''}

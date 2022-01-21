@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import moment from 'moment';
 import Grid from '@mui/material/Grid';
@@ -6,23 +7,25 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DownloadIcon from '@mui/icons-material/Download';
-import ToastrBar from 'app/shared-components/ToastrBar';
 import { jsonToCSV } from 'react-papaparse';
+import { showMessage } from 'app/store/fuse/messageSlice';
 
 const TradeUser = () => {
+  const dispatch = useDispatch();
   const [downloading, setDownloading] = useState(false);
-  const [snackBar, setSnackBar] = useState({
-    isOpen: false,
-    msg: '',
-    type: 'success'
-  });
 
-  const toggleSnackBar = (isOpen, type, msg) => {
-    setSnackBar({
-      isOpen: isOpen,
-      type: type,
-      msg: msg
-    });
+  const toggleSnackBar = (type, msg) => {
+    dispatch(
+      showMessage({
+        message: msg, //text or html
+        autoHideDuration: 6000, //ms
+        anchorOrigin: {
+          vertical  : 'top', //top bottom
+          horizontal: 'right' //left center right
+        },
+        variant: type //success error info warning null
+      })
+    );
   }
 
   const getTradeDataAsync = async () => {
@@ -70,7 +73,7 @@ const TradeUser = () => {
       // get trade data from database
       const trades = await getTradeDataAsync();
       if(!trades || trades.length == 0) {
-        toggleSnackBar(true, 'error', 'No trade data.');
+        toggleSnackBar('error', 'No trade data.');
         return false;
       }
       // rearrange trade data
@@ -78,21 +81,14 @@ const TradeUser = () => {
       // download csv file
       downloadCSV(ordered);
       // toggle success message
-      toggleSnackBar(true, 'success', 'All trade data has been Downloaded.');
+      toggleSnackBar('success', 'All trade data has been Downloaded.');
     } catch(err) {
       console.log(err);
-      toggleSnackBar(true, 'error', 'Failed to download trade data.');
+      toggleSnackBar('error', 'Failed to download trade data.');
     } finally {
       setDownloading(false);
     }
   }
-
-  const handleSnackClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    toggleSnackBar(false, 'success', '');
-  };
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='mt-8 mx-0 w-full'>
@@ -111,13 +107,6 @@ const TradeUser = () => {
           Download
         </LoadingButton>
       </Box>
-
-      <ToastrBar
-        open={snackBar.isOpen}
-        message={snackBar.msg}
-        severity={snackBar.type}
-        handleClose={handleSnackClose}
-      />
     </Grid>
   );
 };
