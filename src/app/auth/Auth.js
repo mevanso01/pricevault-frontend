@@ -9,6 +9,11 @@ import { hideMessage, showMessage } from 'app/store/fuse/messageSlice';
 
 import { setUserData, logoutUser } from './store/userSlice';
 
+export const ROLE = {
+  admin: 'admin',
+  user: 'user'
+}
+
 class Auth extends Component {
   state = {
     waitAuthCheck: true,
