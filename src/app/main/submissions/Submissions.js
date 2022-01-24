@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import useState from 'react-usestateref'; // additional package for assigning state value as soon as possible
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
@@ -7,6 +8,10 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
+import Button from '@mui/material/Button';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import { closeDialog, openDialog } from 'app/store/fuse/dialogSlice';
 import { showMessage } from 'app/store/fuse/messageSlice';
 import { setLoading } from './../store/submissionSlice';
 
@@ -27,7 +32,8 @@ const SubmissionsPage = (props) => {
 
   const [csvData, setCsvData] = useState(null);
   const [isReset, setIsReset] = useState(false);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [invalidPayload, setInvalidPayload, refInvalidPayload] = useState([]);
+  const [showInvalidConfirmModal, setShowInvalidConfirmModal] = useState(false);
 
   const toggleSnackBar = (type, msg) => {
     dispatch(
@@ -43,10 +49,12 @@ const SubmissionsPage = (props) => {
     );
   }
 
-  const getSubmissionPayload = (data) => {
+  const getSubmissionPayload = (data, invalidIds=[]) => {
     var arr = [];
     data.map(item => {
       if(isNaN(item.data.tradeid) || isNaN(item.data.valuation))
+        return false;
+      if (invalidIds.includes(item.data.tradeid) || invalidIds.includes(+item.data.tradeid))
         return false;
 
       arr.push({
@@ -71,16 +79,16 @@ const SubmissionsPage = (props) => {
     return arr;
   }
 
-  const checkDuplicatedTimeFrame = (payload) => {
+  const checkValidate = (payload) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/api/submission/check-time-frame', {
+        .post('/api/submission/check-validate', {
           items: JSON.stringify(payload)
         })
         .then((response) => {
           const { data } = response;
           if (data.success) {
-            resolve(data.duplicates);
+            resolve(data.result);
           } else {
             reject(data.errors);
           }
@@ -109,15 +117,50 @@ const SubmissionsPage = (props) => {
     if(!csvData) return false;
     dispatch(setLoading(true));
     try {
-      // Check if duplicated data is in there
+      // Check if duplicated data and trade id validation
       let tradeIds = getTradeIdPayload(csvData);
-      let duplicates = await checkDuplicatedTimeFrame(tradeIds);
-      console.log('duplicated items: ', duplicates)
-      if(duplicates > 0) {
-        setShowConfirmModal(true);
+      let validate = await checkValidate(tradeIds);
+      console.log('validate result: ', validate);
+      setInvalidPayload(validate?.invalid_ids);
+      
+      // Open time frame duplicated confirm modal
+      if (validate.tf_duplicates_ids && validate.tf_duplicates_ids.length > 0) {
+        dispatch(openDialog({
+          children: (
+            <React.Fragment>
+              <DialogContent>
+                <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
+                  Valuation duplicates found for several trades.
+                </Typography>
+                <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
+                  If you continue, you'll lose old values.
+                </Typography>
+                <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
+                  Are you sure to proceed?
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => timeFrameConfirmed()} variant="contained" color="success" autoFocus>
+                  Continue
+                </Button>
+                <Button onClick={() => { dispatch(closeDialog()); setIsReset(prev => !prev); }} variant="contained">
+                  Cancel
+                </Button>
+              </DialogActions>
+            </React.Fragment>
+          )
+        }));
         dispatch(setLoading(false));
         return false;
       }
+      
+      // Open trade id validation confirm modal
+      if (validate.invalid_ids && validate.invalid_ids.length > 0) {
+        setShowInvalidConfirmModal(true);
+        dispatch(setLoading(false));
+        return false;
+      }
+
       // Save into database
       let payload = getSubmissionPayload(csvData);
       let saved = await saveToDatabase(payload);
@@ -131,12 +174,35 @@ const SubmissionsPage = (props) => {
     }
   }
 
+  const timeFrameConfirmed = async () => {
+    dispatch(closeDialog());
+    dispatch(setLoading(true));
+    try {
+      // Open trade id validation confirm modal
+      if (refInvalidPayload.current.length > 0) {
+        setShowInvalidConfirmModal(true);
+        dispatch(setLoading(false));
+        return false;
+      }
+      // Save into database
+      let payload = getSubmissionPayload(csvData);
+      let saved = await saveToDatabase(payload);
+      toggleSnackBar('success', saved);
+      setIsReset(prev => !prev);
+      dispatch(setLoading(false));
+    } catch (err) {
+      toggleSnackBar('error', err[0]);
+      setIsReset(prev => !prev);
+      dispatch(setLoading(false));
+    } 
+  }
+
   const saveConfirmed = async () => {
-    setShowConfirmModal(false);
+    setShowInvalidConfirmModal(false);
     dispatch(setLoading(true));
     try {
       // Save into database
-      let payload = getSubmissionPayload(csvData);
+      let payload = getSubmissionPayload(csvData, refInvalidPayload.current);
       let saved = await saveToDatabase(payload);
       toggleSnackBar('success', saved);
     } catch (err) {
@@ -176,15 +242,16 @@ const SubmissionsPage = (props) => {
             
           <ConfirmModal
             title={''}
-            open={showConfirmModal}
-            setOpen={setShowConfirmModal}
+            open={showInvalidConfirmModal}
+            setOpen={setShowInvalidConfirmModal}
             handleClickOk={saveConfirmed}
+            handleClickCancel={() => setIsReset(prev => !prev)}
           >
             <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
-              Valuation duplicates found for several trades.
+              Some valuations have invalid trades.
             </Typography>
             <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
-              If you continue, you'll lose old values.
+              If you continue, they'll be filtered out.
             </Typography>
             <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
               Are you sure to proceed?

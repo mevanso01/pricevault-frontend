@@ -255,6 +255,7 @@ const TradeAdmin = () => {
         open={showConfirmModal}
         setOpen={setShowConfirmModal}
         handleClickOk={saveConfirmed}
+        handleClickCancel={() => setIsReset(prev => !prev)}
       >
         <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
           TradeId duplicates found for several trades.

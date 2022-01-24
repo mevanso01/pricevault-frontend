@@ -12,11 +12,15 @@ const ConfirmModal = (props) => {
     children,
     open,
     setOpen,
-    handleClickOk
+    handleClickOk,
+    handleClickCancel
   } = props;
 
   const handleClose = () => {
     setOpen(false);
+    if (handleClickCancel){
+      handleClickCancel();
+    }
   };
 
   return (
