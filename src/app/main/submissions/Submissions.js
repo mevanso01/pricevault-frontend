@@ -121,8 +121,31 @@ const SubmissionsPage = (props) => {
       let tradeIds = getTradeIdPayload(csvData);
       let validate = await checkValidate(tradeIds);
       console.log('validate result: ', validate);
+      // Open time frame duplicated confirm modal
+      if (!validate.unique_ins_type) {
+        dispatch(openDialog({
+          children: (
+            <React.Fragment>
+              <DialogContent>
+                <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
+                  Multiple InstrumentTypes are associated with your submission.
+                </Typography>
+                <Typography variant="subtitle1" textAlign={'center'} display={'block'} component={'span'}>
+                  Please update it to associate only a single one.
+                </Typography>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => { dispatch(closeDialog()); setIsReset(prev => !prev); }} variant="contained" color="success" autoFocus>
+                  Ok
+                </Button>
+              </DialogActions>
+            </React.Fragment>
+          )
+        }));
+        dispatch(setLoading(false));
+        return false;
+      }
       setInvalidPayload(validate?.invalid_ids);
-      
       // Open time frame duplicated confirm modal
       if (validate.tf_duplicates_ids && validate.tf_duplicates_ids.length > 0) {
         dispatch(openDialog({
