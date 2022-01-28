@@ -77,13 +77,27 @@ const Toolbar = (props) => {
       <Item>
         <ToolbarItem title={'Date'}>
           <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DatePicker
-              value={date}
-              onChange={handleDateChange}
-              inputFormat="dd MMM yy"
-              renderInput={(params) => <TextField {...params} />}
-              inputProps={{ style: { width: 80, fontSize: 14, padding: '6px 0 6px 12px' } }}
-            />
+            {(instrumentType && instruments) && (
+              <>
+                {instruments.find(item => item._id == instrumentType)?.serviceFrequency == 'Daily' ? (
+                  <DatePicker
+                    value={date}
+                    onChange={handleDateChange}
+                    inputFormat="dd MMM yy"
+                    renderInput={(params) => <TextField {...params} />}
+                    inputProps={{ style: { width: 100, fontSize: 14, padding: '6px 0 6px 12px' } }}
+                  />
+                ) : (
+                  <DatePicker
+                    views={['year', 'month']}
+                    value={date}
+                    onChange={handleDateChange}
+                    renderInput={(params) => <TextField {...params} />}
+                    inputProps={{ style: { width: 100, fontSize: 14, padding: '6px 0 6px 12px' } }}
+                  />
+                )}
+              </>
+            )}
           </LocalizationProvider>
         </ToolbarItem>
       </Item>

@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getAllStrikeData = createAsyncThunk('main/dashboard/getAllStrikeData', async (instrumentTypeId) => {
-  if (!instrumentTypeId) return;
+export const getAllStrikeData = createAsyncThunk('main/dashboard/getAllStrikeData', async (content) => {
+  if (!content) return;
   try {
-    const response = await axios.get('/api/submission/' + instrumentTypeId);
+    const { type, date } = content;
+    const response = await axios.post('/api/result/all-strikes', { type, date });
     const data = await response.data;
     return data.items;
   } catch (err) {

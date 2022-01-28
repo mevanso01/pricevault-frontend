@@ -45,10 +45,7 @@ function DashboardPage(props) {
 
   const [tabIndex, setTabIndex] = useState('1');
   const [instrumentType, setInstrumentType] = useState('');
-  const [date, setDate] = useState({
-    original: new Date(),
-    hashed: ''
-  });
+  const [date, setDate] = useState(new Date());
   const [lookBack, setLookBack] = useState('1Y');
   const [vols, setVols] = useState('Vols');
 
@@ -59,7 +56,7 @@ function DashboardPage(props) {
   useEffect(() => {
     if (!instrumentType) return false;
     dispatch(
-      getAllStrikeData(instrumentType)
+      getAllStrikeData({ type: instrumentType, date: date })
     );
   }, [instrumentType, date]);
 
@@ -76,12 +73,7 @@ function DashboardPage(props) {
   };
 
   const handleDateChange = (newDate) => {
-    const hashedDate = moment(newDate).format('yyyyMMDD');
-    console.log(hashedDate)
-    setDate({
-      original: newDate,
-      hashed: hashedDate
-    });
+    setDate(newDate);
   };
 
   const handleLookBackChange = (event, newLookBack) => {
@@ -103,7 +95,7 @@ function DashboardPage(props) {
           <Box className="mb-4">
             <Toolbar
               instrumentType={instrumentType}
-              date={date.original}
+              date={date}
               lookBack={lookBack}
               vols={vols}
               handleInstrumentTypeChange={handleInstrumentTypeChange}
@@ -115,20 +107,26 @@ function DashboardPage(props) {
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border mx-0 w-full'>
             <Grid item md={6} sm={12} className='w-full'>
               {AllStrikeLoading ? (
-                <FuseLoading />
+                <Box className='flex items-center h-full'>
+                  <FuseLoading />
+                </Box>
               ) : AllStrikeErrors.length > 0 ? (
-                <Typography variant="subtitle2" mt={4} mb={2} component={'span'} className='mx-auto'>
-                  {AllStrikeErrors.join(', ')}
-                </Typography>
+                <Box className='flex items-center h-full'>
+                  <Typography variant="subtitle2" component={'span'} className='mx-auto'>
+                    {AllStrikeErrors.join(', ')}
+                  </Typography>
+                </Box>
               ) : (!AllStrikeData || AllStrikeData.length == 0) ? (
-                <Typography variant="subtitle2" mt={4} mb={2} component={'span'} className='mx-auto'>
-                  {'No Data.'}
-                </Typography>
+                <Box className='flex items-center h-full'>
+                  <Typography variant="subtitle2" component={'span'} className='mx-auto'>
+                    {'No Data.'}
+                  </Typography>
+                </Box>
               ) : (
                 <HeatChart
                   data={AllStrikeData}
                   xRange={AllStrikeXRange}
-                  title={`Change since ${moment(date).format('DD MMM YYYY')}`}
+                  title={`Sum of ${vols} for all strikes`}
                 />
               )}
             </Grid>
