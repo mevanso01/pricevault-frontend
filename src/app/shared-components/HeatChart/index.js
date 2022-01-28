@@ -2,7 +2,17 @@ import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const HeatChart = (props) => {
-  const { data, xRange, title } = props;
+  const { data, dataRange, xRange, title } = props;
+
+  let dataMin;
+  let dataMax;
+  let diff;
+  if (dataRange && dataRange.length == 2) {
+    dataMin = +(dataRange[0]);
+    dataMax = +(dataRange[1]);
+    diff = dataMax - dataMin;
+  }
+
   const options = {
     chart: {
       height: 350,
@@ -28,26 +38,26 @@ const HeatChart = (props) => {
         colorScale: {
           ranges: [
             {
-              from: -100,
-              to: 20,
+              from: dataMin || -100,
+              to: (dataMin + diff / 4) || 20,
               name: 'low',
               color: '#00A100'
             },
             {
-              from: 21,
-              to: 50,
+              from: (dataMin + diff / 4) || 21,
+              to: (dataMin + diff * 2 / 4) || 50,
               name: 'medium',
               color: '#128FD9'
             },
             {
-              from: 51,
-              to: 100,
+              from: (dataMin + diff * 2 / 4) || 51,
+              to: (dataMin + diff * 3 / 4) || 100,
               name: 'high',
               color: '#FFB200'
             },
             {
-              from: 101,
-              to: 1000,
+              from: (dataMin + diff * 3 / 4) || 101,
+              to: dataMax || 1000,
               name: 'extreme',
               color: '#FF0000'
             }
@@ -63,7 +73,35 @@ const HeatChart = (props) => {
     },
     xaxis: {
       type: 'category',
-      categories: xRange || []
+      categories: xRange || [],
+      title: {
+        text: 'Tenor',
+        rotate: -90,
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 600,
+          cssClass: 'apexcharts-yaxis-title',
+        },
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Expiry',
+        rotate: -90,
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+          color: undefined,
+          fontSize: '12px',
+          fontFamily: 'Helvetica, Arial, sans-serif',
+          fontWeight: 600,
+          cssClass: 'apexcharts-yaxis-title',
+        },
+      },
     },
     title: {
       text: title,

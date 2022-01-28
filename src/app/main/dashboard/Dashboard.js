@@ -38,6 +38,7 @@ function DashboardPage(props) {
   const instruments = useSelector(({ main }) => main.instruments.items);
   const {
     items: AllStrikeData,
+    dataRange: AllStrikeDataRange,
     xRange: AllStrikeXRange,
     loading: AllStrikeLoading,
     errors: AllStrikeErrors
@@ -125,6 +126,7 @@ function DashboardPage(props) {
               ) : (
                 <HeatChart
                   data={AllStrikeData}
+                  dataRange={AllStrikeDataRange}
                   xRange={AllStrikeXRange}
                   title={`Sum of ${vols} for all strikes`}
                 />

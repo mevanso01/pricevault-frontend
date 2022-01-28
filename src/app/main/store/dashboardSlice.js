@@ -18,6 +18,7 @@ const dashboardSlice = createSlice({
   initialState: {
     allStrike: {
       items: [],
+      dataRange: [],
       xRange: [],
       loading: false,
       errors: []
@@ -33,6 +34,7 @@ const dashboardSlice = createSlice({
     },
     [getAllStrikeData.fulfilled]: (state, action) => {
       state.allStrike.items = action.payload.data;
+      state.allStrike.dataRange = action.payload.dataRange;
       state.allStrike.xRange = action.payload.xRange;
       state.allStrike.errors = [];
       state.allStrike.loading = false;
