@@ -49,8 +49,8 @@ const TradeAdmin = () => {
     );
   }
 
-  useEffect(async () => {
-    await dispatch(getInstruments());
+  useEffect(() => {
+    dispatch(getInstruments());
   }, [dispatch]);
 
   useEffect(() => {
