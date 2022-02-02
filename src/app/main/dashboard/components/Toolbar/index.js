@@ -28,10 +28,12 @@ const Toolbar = (props) => {
   const {
     instrumentType,
     date,
+    customDate,
     lookBack,
     vols,
     handleInstrumentTypeChange,
     handleDateChange,
+    handleCustomDateChange,
     handleLookBackChange,
     handleVolsChange
   } = props;
@@ -115,8 +117,29 @@ const Toolbar = (props) => {
             <ToggleButton value="1M" aria-label="1M">1M</ToggleButton>
             <ToggleButton value="3M" aria-label="3M">3M</ToggleButton>
             <ToggleButton value="1Y" aria-label="1Y">1Y</ToggleButton>
-            <ToggleButton value="custom" aria-label="custom">Custom date...</ToggleButton>
+            {lookBack !== "custom" && (
+              <ToggleButton value="custom" aria-label="custom">Custom date...</ToggleButton>
+            )}
           </ToggleButtonGroup>
+          {lookBack === "custom" && (
+            instruments.find(item => item._id == instrumentType)?.serviceFrequency == 'Daily' ? (
+              <DatePicker
+                value={customDate}
+                onChange={handleCustomDateChange}
+                inputFormat="dd MMM yy"
+                renderInput={(params) => <TextField {...params} />}
+                inputProps={{ style: { width: 100, fontSize: 14, padding: '6px 0 6px 12px', height: '24px' } }}
+              />
+            ) : (
+              <DatePicker
+                views={['year', 'month']}
+                value={customDate}
+                onChange={handleCustomDateChange}
+                renderInput={(params) => <TextField {...params} />}
+                inputProps={{ style: { width: 100, fontSize: 14, padding: '6px 0 6px 12px', height: '24px' } }}
+              />
+            )
+          )}
         </ToolbarItem>
       </Item>
       <Item>
