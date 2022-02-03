@@ -35,7 +35,8 @@ const Toolbar = (props) => {
     handleDateChange,
     handleCustomDateChange,
     handleLookBackChange,
-    handleVolsChange
+    handleVolsChange,
+    handleRefreshClick
   } = props;
 
   const instruments = useSelector(({ main }) => main.instruments.items);
@@ -47,6 +48,7 @@ const Toolbar = (props) => {
           aria-label="refresh"
           size="small"
           style={{ border: '1px solid #e4e6e8', borderRadius: '5px', height: '30px' }}
+          onClick={handleRefreshClick}
         >
           <RefreshIcon fontSize='18px' />
         </IconButton>
@@ -125,6 +127,7 @@ const Toolbar = (props) => {
             instruments.find(item => item._id == instrumentType)?.serviceFrequency == 'Daily' ? (
               <DatePicker
                 value={customDate}
+                shouldDisableDate={(d) => d.getDate() >= date.getDate()}
                 onChange={handleCustomDateChange}
                 inputFormat="dd MMM yy"
                 renderInput={(params) => <TextField {...params} />}
@@ -134,6 +137,7 @@ const Toolbar = (props) => {
               <DatePicker
                 views={['year', 'month']}
                 value={customDate}
+                maxDate={new Date(date.getFullYear(), date.getMonth() - 1, '30')}
                 onChange={handleCustomDateChange}
                 renderInput={(params) => <TextField {...params} />}
                 inputProps={{ style: { width: 100, fontSize: 14, padding: '6px 0 6px 12px', height: '24px' } }}

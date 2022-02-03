@@ -88,7 +88,14 @@ function DashboardPage(props) {
     dispatch(
       getPastStrikeData({ type: instrumentType, date: customDate })
     );
-  }, [instrumentType, date, customDate]);
+  }, [instrumentType, date]);
+
+  useEffect(() => {
+    if (!instrumentType) return false;
+    dispatch(
+      getPastStrikeData({ type: instrumentType, date: customDate })
+    );
+  }, [customDate]);
 
   useEffect(() => {
     setInstrumentType(instruments[0]?._id);
@@ -103,6 +110,7 @@ function DashboardPage(props) {
     if (allData.length === 0 && pastData.length > 0) return past;
 
     var newData = [];
+    var dataArray = [];
     allData.forEach((item, index) => {
       var newItem = {};
       newItem.name = item.name;
@@ -110,8 +118,9 @@ function DashboardPage(props) {
       item.data.forEach(function (currentValue, i, arr) {
         let a = +currentValue || 0;
         let b = +(pastData[index]?.data[i]) || 0;
-        let c = a - b;
+        let c = b - a;
         newItem.data.push(c);
+        dataArray.push(c);
       });
 
       newData.push(newItem);
@@ -119,7 +128,7 @@ function DashboardPage(props) {
 
     return {
       items: newData,
-      dataRange: all.dataRange,
+      dataRange: [Math.min(...dataArray), Math.max(...dataArray)],
       xRange: all.xRange,
       loading: false,
       errors: []
@@ -204,6 +213,19 @@ function DashboardPage(props) {
     setCustomDate(newDate);
   };
 
+  const handleRefreshClick = () => {
+    setNewData({
+      ...newData,
+      loading: true
+    });
+    dispatch(
+      getAllStrikeData({ type: instrumentType, date: date })
+    );
+    dispatch(
+      getPastStrikeData({ type: instrumentType, date: customDate })
+    );
+  }
+
   return (
     <Root
       content={
@@ -220,6 +242,7 @@ function DashboardPage(props) {
               handleCustomDateChange={handleCustomDateChange}
               handleLookBackChange={handleLookBackChange}
               handleVolsChange={handleVolsChange}
+              handleRefreshClick={handleRefreshClick}
             />
           </Box>
           <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border mx-0 w-full'>
