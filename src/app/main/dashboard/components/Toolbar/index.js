@@ -127,7 +127,7 @@ const Toolbar = (props) => {
             instruments.find(item => item._id == instrumentType)?.serviceFrequency == 'Daily' ? (
               <DatePicker
                 value={customDate}
-                shouldDisableDate={(d) => d.getDate() >= date.getDate()}
+                maxDate={new Date(date.getFullYear(), date.getMonth(), date.getDate() - 1)}
                 onChange={handleCustomDateChange}
                 inputFormat="dd MMM yy"
                 renderInput={(params) => <TextField {...params} />}

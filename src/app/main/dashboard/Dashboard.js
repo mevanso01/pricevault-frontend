@@ -71,8 +71,7 @@ function DashboardPage(props) {
 
   useEffect(() => {
     if (AllStrikeLoading || PastStrikeLoading) return;
-
-    let newData = getDifferenceDate(AllStrike, PastStrike);
+    let newData = getSubtractData(AllStrike, PastStrike);
     setNewData(newData);
   }, [AllStrikeData, PastStrikeData]);
 
@@ -81,46 +80,43 @@ function DashboardPage(props) {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!instrumentType) return false;
-    dispatch(
-      getAllStrikeData({ type: instrumentType, date: date })
-    );
-    dispatch(
-      getPastStrikeData({ type: instrumentType, date: customDate })
-    );
+    if (!instrumentType) return;
+    dispatch(getAllStrikeData({ type: instrumentType, date: date }));
   }, [instrumentType, date]);
 
   useEffect(() => {
-    if (!instrumentType) return false;
-    dispatch(
-      getPastStrikeData({ type: instrumentType, date: customDate })
-    );
-  }, [customDate]);
+    if (!instrumentType) return;
+    setNewData({ ...newData, loading: true });
+    dispatch(getPastStrikeData({ type: instrumentType, date: customDate }));
+  }, [instrumentType, customDate]);
 
   useEffect(() => {
     setInstrumentType(instruments[0]?._id);
   }, [instruments]);
 
-  const getDifferenceDate = (all, past) => {
+  const getSubtractData = (all, past) => {
     let allData = all.items;
     let pastData = past.items
-    if (!allData || !pastData) return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
-    if (allData.length === 0 && pastData.length === 0) return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
-    if (allData.length > 0 && pastData.length === 0) return all;
-    if (allData.length === 0 && pastData.length > 0) return past;
+    if (!allData || !pastData)
+      return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
+    if (allData.length === 0 || pastData.length === 0)
+      return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
 
     var newData = [];
     var dataArray = [];
-    allData.forEach((item, index) => {
+    pastData.forEach((item, index) => {
       var newItem = {};
       newItem.name = item.name;
       newItem.data = [];
       item.data.forEach(function (currentValue, i, arr) {
-        let a = +currentValue || 0;
-        let b = +(pastData[index]?.data[i]) || 0;
-        let c = b - a;
+        let a = +currentValue || null;
+        let b = +(allData[index]?.data[i]) || null;
+        let c = null;
+        if (a != null && b != null) {
+          c = (a - b).toFixed(2);
+          dataArray.push(c);
+        }
         newItem.data.push(c);
-        dataArray.push(c);
       });
 
       newData.push(newItem);
@@ -144,10 +140,6 @@ function DashboardPage(props) {
   };
 
   const handleDateChange = (newDate) => {
-    setNewData({
-      ...newData,
-      loading: true
-    });
     setDate(newDate);
 
     switch (lookBack) {
@@ -172,12 +164,6 @@ function DashboardPage(props) {
   const handleLookBackChange = (event, newLookBack) => {
     if (newLookBack !== null) {
       setLookBack(newLookBack);
-      if (newLookBack !== 'custom') {
-        setNewData({
-          ...newData,
-          loading: true
-        });
-      }
 
       switch (newLookBack) {
         case "1D":
@@ -206,24 +192,13 @@ function DashboardPage(props) {
   };
 
   const handleCustomDateChange = (newDate) => {
-    setNewData({
-      ...newData,
-      loading: true
-    });
     setCustomDate(newDate);
   };
 
   const handleRefreshClick = () => {
-    setNewData({
-      ...newData,
-      loading: true
-    });
-    dispatch(
-      getAllStrikeData({ type: instrumentType, date: date })
-    );
-    dispatch(
-      getPastStrikeData({ type: instrumentType, date: customDate })
-    );
+    setNewData({ ...newData, loading: true });
+    dispatch(getAllStrikeData({ type: instrumentType, date: date }));
+    dispatch(getPastStrikeData({ type: instrumentType, date: customDate }));
   }
 
   return (

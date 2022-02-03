@@ -25,36 +25,6 @@ export const getPastStrikeData = createAsyncThunk('main/dashboard/getPastStrikeD
   }
 });
 
-const getDifferenceDate = (all, past) => {
-  let allData = all.items;
-  let pastData = past.data
-  if (!allData || !pastData) return { data: [], dataRange: [], xRange: [] };
-  if (allData.length === 0 && pastData.length === 0) return { data: [], dataRange: [], xRange: [] };
-  if (allData.length > 0 && pastData.length === 0) return all;
-  if (allData.length === 0 && pastData.length > 0) return past;
-
-  var newData = [];
-  allData.forEach((item, index) => {
-    var newItem = {};
-    newItem.name = item.name;
-    newItem.data = [];
-    item.data.forEach(function (currentValue, i, arr) {
-      let a = +currentValue || 0;
-      let b = +(pastData[index]?.data[i]) || 0;
-      let c = a - b;
-      newItem.data.push(c);
-    });
-
-    newData.push(newItem);
-  });
-
-  return {
-    data: newData,
-    dataRange: all.dataRange,
-    xRange: all.xRange
-  }
-}
-
 const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState: {
