@@ -124,3 +124,7 @@ input:-webkit-autofill:active
 .fc-scrollgrid-section-liquid {
     height: 1px !important;
 }
+
+rect.apexcharts-heatmap-rect:not([val]) {
+    fill: white;
+}

@@ -4,14 +4,14 @@ import ReactApexChart from 'react-apexcharts';
 const HeatChart = (props) => {
   const { data, dataRange, xRange, title } = props;
 
-  let dataMin;
-  let dataMax;
-  let diff;
-  if (dataRange && dataRange.length == 2) {
-    dataMin = +(dataRange[0]);
-    dataMax = +(dataRange[1]);
-    diff = dataMax - dataMin;
-  }
+  // let dataMin;
+  // let dataMax;
+  // let diff;
+  // if (dataRange && dataRange.length == 2) {
+  //   dataMin = +(dataRange[0]);
+  //   dataMax = +(dataRange[1]);
+  //   diff = dataMax - dataMin;
+  // }
 
   const options = {
     chart: {
@@ -21,6 +21,7 @@ const HeatChart = (props) => {
         show: true
       },
     },
+    colors: ["#008000"],
     stroke: {
       width: 1
     },
@@ -30,45 +31,51 @@ const HeatChart = (props) => {
         options: {}
       }
     ],
-    plotOptions: {
-      heatmap: {
-        shadeIntensity: 0.5,
-        radius: 0,
-        useFillColorAsStroke: true,
-        colorScale: {
-          ranges: [
-            {
-              from: dataMin || -100,
-              to: (dataMin + diff / 4) || 20,
-              name: 'low',
-              color: '#00A100'
-            },
-            {
-              from: (dataMin + diff / 4) || 21,
-              to: (dataMin + diff * 2 / 4) || 50,
-              name: 'medium',
-              color: '#128FD9'
-            },
-            {
-              from: (dataMin + diff * 2 / 4) || 51,
-              to: (dataMin + diff * 3 / 4) || 100,
-              name: 'high',
-              color: '#FFB200'
-            },
-            {
-              from: (dataMin + diff * 3 / 4) || 101,
-              to: dataMax || 1000,
-              name: 'extreme',
-              color: '#FF0000'
-            }
-          ]
-        }
-      }
-    },
+    // plotOptions: {
+    //   heatmap: {
+    //     shadeIntensity: 0.5,
+    //     radius: 0,
+    //     useFillColorAsStroke: true,
+    //     colorScale: {
+    //       ranges: [
+    //         {
+    //           from: null,
+    //           to: null,
+    //           name: 'empty',
+    //           color: '#ffffff'
+    //         },
+    //         {
+    //           from: dataMin || -100,
+    //           to: (dataMin + diff / 4) || 20,
+    //           name: 'low',
+    //           color: '#99ff99'
+    //         },
+    //         {
+    //           from: (dataMin + diff / 4) || 21,
+    //           to: (dataMin + diff * 2 / 4) || 50,
+    //           name: 'medium',
+    //           color: '#1aff1a'
+    //         },
+    //         {
+    //           from: (dataMin + diff * 2 / 4) || 51,
+    //           to: (dataMin + diff * 3 / 4) || 100,
+    //           name: 'high',
+    //           color: '#00cc00'
+    //         },
+    //         {
+    //           from: (dataMin + diff * 3 / 4) || 101,
+    //           to: dataMax || 1000,
+    //           name: 'extreme',
+    //           color: '#008000'
+    //         }
+    //       ]
+    //     }
+    //   }
+    // },
     dataLabels: {
       enabled: true,
       style: {
-        colors: ['#fff']
+        colors: ['#363535']
       }
     },
     xaxis: {
