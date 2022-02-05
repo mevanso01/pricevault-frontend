@@ -126,5 +126,5 @@ input:-webkit-autofill:active
 }
 
 rect.apexcharts-heatmap-rect:not([val]) {
-    fill: white;
+    fill: #f6f7f9;
 }

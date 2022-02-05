@@ -133,7 +133,7 @@ function DashboardPage(props) {
     <Root
       content={
         <Box>
-          <Box className="mb-4">
+          <Box className="mt-8 mb-6">
             <Toolbar
               instrumentType={instrumentType}
               date={date}
@@ -148,7 +148,7 @@ function DashboardPage(props) {
               handleRefreshClick={handleRefreshClick}
             />
           </Box>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border mx-0 w-full'>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border mx-0 mt-8 pt-6 w-full'>
             <Grid item md={6} sm={12} className='w-full'>
               {AllStrikeLoading ? (
                 <Box className='flex items-center h-full py-40'>
@@ -202,7 +202,7 @@ function DashboardPage(props) {
               )}
             </Grid>
           </Grid>
-          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border-b mt-4 mx-0 w-full'>
+          <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='mt-4 mx-0 w-full'>
             <TabContext value={tabIndex}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <TabList onChange={handleTabChange} aria-label="dashboard-tab">
@@ -211,7 +211,7 @@ function DashboardPage(props) {
                 </TabList>
               </Box>
               <TabPanel value="1" className="pr-0 w-full">
-                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border'>
+                <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }} className='border pt-6'>
                   <Grid item md={6} sm={12} className='w-full'>
                     <HeatChart
                       data={heatData}

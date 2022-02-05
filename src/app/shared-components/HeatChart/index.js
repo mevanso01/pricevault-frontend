@@ -21,7 +21,7 @@ const HeatChart = (props) => {
         show: true
       },
     },
-    colors: ["#008000"],
+    colors: ["#17a2b8"],
     stroke: {
       width: 1
     },
@@ -91,11 +91,15 @@ const HeatChart = (props) => {
           fontSize: '12px',
           fontFamily: 'Helvetica, Arial, sans-serif',
           fontWeight: 600,
-          cssClass: 'apexcharts-yaxis-title',
+          cssClass: 'apexcharts-xaxis-title',
         },
       },
+      tooltip: {
+        enabled: true
+      }
     },
     yaxis: {
+      seriesName: 'name',
       title: {
         text: 'Expiry',
         rotate: -90,
@@ -109,11 +113,23 @@ const HeatChart = (props) => {
           cssClass: 'apexcharts-yaxis-title',
         },
       },
+      tooltip: {
+        enabled: false
+      }
     },
     title: {
       text: title,
       align: 'center',
     },
+    tooltip: {
+      enabled: true,
+      y: {
+        formatter: undefined,
+        title: {
+          formatter: (seriesName) => "Expiry-" + seriesName + ": ",
+        }
+      }
+    }
   };
 
   return (
