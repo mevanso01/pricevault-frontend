@@ -123,11 +123,13 @@ const HeatChart = (props) => {
     },
     tooltip: {
       enabled: true,
-      y: {
-        formatter: undefined,
-        title: {
-          formatter: (seriesName) => "Expiry-" + seriesName + ": ",
-        }
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        const value = series[seriesIndex][dataPointIndex] || 'N/A';
+        const expiry = w.globals.seriesNames[seriesIndex] || 'N/A';
+        const tenor = w.globals.labels[dataPointIndex] || 'N/A';
+        return `<div class="arrow_box apex-custom-tooltip">
+            <span><b>${value} </b>(${expiry}, ${tenor})</span>
+          </div>`
       }
     }
   };

@@ -128,3 +128,8 @@ input:-webkit-autofill:active
 rect.apexcharts-heatmap-rect:not([val]) {
     fill: #f6f7f9;
 }
+
+.apex-custom-tooltip {
+    font-size: 12px;
+    padding: 5px 8px;
+}
