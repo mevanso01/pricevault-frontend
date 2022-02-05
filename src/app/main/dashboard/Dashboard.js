@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
 import { getInstruments } from '../store/instrumentsSlice';
 import { getAllStrikeData, getPastStrikeData } from '../store/dashboardSlice';
+import { getSubtractMatrix, convertLookbackToDate } from '../../services/helper';
 
 import Toolbar from './components/Toolbar';
 import HeatChart from './../../shared-components/HeatChart';
@@ -71,7 +72,7 @@ function DashboardPage(props) {
 
   useEffect(() => {
     if (AllStrikeLoading || PastStrikeLoading) return;
-    let newData = getSubtractData(AllStrike, PastStrike);
+    let newData = getSubtractMatrix(AllStrike, PastStrike);
     setNewData(newData);
   }, [AllStrikeData, PastStrikeData]);
 
@@ -94,43 +95,6 @@ function DashboardPage(props) {
     setInstrumentType(instruments[0]?._id);
   }, [instruments]);
 
-  const getSubtractData = (all, past) => {
-    let allData = all.items;
-    let pastData = past.items
-    if (!allData || !pastData)
-      return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
-    if (allData.length === 0 || pastData.length === 0)
-      return { items: [], dataRange: [], xRange: [], loading: false, errors: [] };
-
-    var newData = [];
-    var dataArray = [];
-    pastData.forEach((item, index) => {
-      var newItem = {};
-      newItem.name = item.name;
-      newItem.data = [];
-      item.data.forEach(function (currentValue, i, arr) {
-        let a = +currentValue || null;
-        let b = +(allData[index]?.data[i]) || null;
-        let c = null;
-        if (a != null && b != null) {
-          c = (a - b).toFixed(2);
-          dataArray.push(c);
-        }
-        newItem.data.push(c);
-      });
-
-      newData.push(newItem);
-    });
-
-    return {
-      items: newData,
-      dataRange: [Math.min(...dataArray), Math.max(...dataArray)],
-      xRange: all.xRange,
-      loading: false,
-      errors: []
-    }
-  }
-
   const handleTabChange = (event, newValue) => {
     setTabIndex(newValue);
   };
@@ -141,54 +105,18 @@ function DashboardPage(props) {
 
   const handleDateChange = (newDate) => {
     setDate(newDate);
-
-    switch (lookBack) {
-      case "1D":
-        setCustomDate(moment(newDate).subtract(1, "days"));
-        break;
-      case "1W":
-        setCustomDate(moment(newDate).subtract(1, "weeks"));
-        break;
-      case "1M":
-        setCustomDate(moment(newDate).subtract(1, "months"));
-        break;
-      case "3M":
-        setCustomDate(moment(newDate).subtract(3, "months"));
-        break;
-      case "1Y":
-        setCustomDate(moment(newDate).subtract(1, "years"));
-        break;
-    }
+    convertLookbackToDate(lookBack, newDate, setCustomDate);
   };
 
   const handleLookBackChange = (event, newLookBack) => {
-    if (newLookBack !== null) {
-      setLookBack(newLookBack);
-
-      switch (newLookBack) {
-        case "1D":
-          setCustomDate(moment(date).subtract(1, "days"));
-          break;
-        case "1W":
-          setCustomDate(moment(date).subtract(1, "weeks"));
-          break;
-        case "1M":
-          setCustomDate(moment(date).subtract(1, "months"));
-          break;
-        case "3M":
-          setCustomDate(moment(date).subtract(3, "months"));
-          break;
-        case "1Y":
-          setCustomDate(moment(date).subtract(1, "years"));
-          break;
-      }
-    }
+    if (newLookBack == null) return;
+    setLookBack(newLookBack);
+    convertLookbackToDate(newLookBack, date, setCustomDate);
   };
 
   const handleVolsChange = (event, newVols) => {
-    if (newVols !== null) {
-      setVols(newVols);
-    }
+    if (newVols == null) return;
+    setVols(newVols);
   };
 
   const handleCustomDateChange = (newDate) => {
@@ -199,7 +127,7 @@ function DashboardPage(props) {
     setNewData({ ...newData, loading: true });
     dispatch(getAllStrikeData({ type: instrumentType, date: date }));
     dispatch(getPastStrikeData({ type: instrumentType, date: customDate }));
-  }
+  };
 
   return (
     <Root
@@ -293,7 +221,7 @@ function DashboardPage(props) {
                   <Grid item md={6} sm={12} className='w-full'>
                     <HeatChart
                       data={heatData}
-                      title={`Change since ${moment(date).format('DD MMM YYYY')}`}
+                      title={`Change since ${moment(customDate).format('DD MMM YYYY')}`}
                     />
                   </Grid>
                 </Grid>
