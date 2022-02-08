@@ -139,6 +139,10 @@ rect.apexcharts-heatmap-rect:not([val]) {
     margin-right: auto;
 }
 
+.react-code-input > input:focus {
+    outline-color: #62e0f7;
+}
+
 .link-text {
     color: #22d3ee;
     text-decoration: underline;

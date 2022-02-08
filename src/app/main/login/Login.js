@@ -1,24 +1,18 @@
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import { styled, darken } from '@mui/material/styles';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Link, useHistory } from 'react-router-dom';
 import JWTLoginTab from './tabs/JWTLoginTab';
-import VerifyTab from './tabs/VerifyTab';
-import { resetSlice } from 'app/auth/store/loginSlice';
+import OTPLoginTab from './tabs/OTPLoginTab';
+import { resetSlice as resetLoginSlice } from 'app/auth/store/loginSlice';
+import { sendOTP, resetSlice as resetVerifySlice } from 'app/auth/store/verifySlice';
 
 const Root = styled('div')(({ theme }) => ({
-  // background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
-  //   theme.palette.primary.dark,
-  //   0.5
-  // )} 100%)`,
-  // color: theme.palette.primary.contrastText,
-
   '& .Login-leftSection': {},
-
   '& .Login-rightSection': {
     background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
       theme.palette.primary.dark,
@@ -33,18 +27,13 @@ function Login() {
   const dispatch = useDispatch();
   const login = useSelector(({ auth }) => auth.login);
 
-  // const [selectedTab, setSelectedTab] = useState(0);
-
-  // function handleTabChange(event, value) {
-  //   setSelectedTab(value);
-  // }
-
-  const handleResendCode = () => {
-    console.log('resend');
+  const handleResendOTP = () => {
+    dispatch(sendOTP(login.userId));
   }
 
   const backLoginPage = () => {
-    dispatch(resetSlice());
+    dispatch(resetLoginSlice());
+    dispatch(resetVerifySlice());
     history.push('/');
   }
 
@@ -80,14 +69,20 @@ function Login() {
                 </div>
               </div>
             </motion.div>
-            {login.success ? <VerifyTab /> : <JWTLoginTab />}
+
+            {login.success ?
+              <OTPLoginTab />
+              :
+              <JWTLoginTab />
+            }
+
           </CardContent>
 
           <div className="flex flex-col items-center justify-center pb-32">
             {login.success ? (
               <div>
                 <span className="font-normal mr-8">Didn't get a code?</span>
-                <span className="font-normal link-text" onClick={handleResendCode}>
+                <span className="font-normal link-text" onClick={handleResendOTP}>
                   Resend
                 </span>
               </div>

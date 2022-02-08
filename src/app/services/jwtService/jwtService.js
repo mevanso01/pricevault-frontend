@@ -71,7 +71,7 @@ class JwtService extends FuseUtils.EventEmitter {
             if (!data.enabledVerify) {
               this.setSession(data.access_token);
             }
-            resolve(data.user);
+            resolve(data);
           } else {
             reject(data.errors);
           }
@@ -79,10 +79,10 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  verifyPhoneCode = (userId, code) => {
+  verifyOTP = (userId, code) => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/api/auth/verify', {
+        .post('/api/auth/verify-otp', {
           userId,
           code
         })

@@ -6,7 +6,7 @@ import { submitVerify } from 'app/auth/store/verifySlice';
 import ReactCodeInput from 'react-code-input';
 import _ from '@lodash';
 
-function VerifyTab(props) {
+function OTPLoginTab(props) {
   const dispatch = useDispatch();
   const login = useSelector(({ auth }) => auth.login);
   const verify = useSelector(({ auth }) => auth.verify);
@@ -25,8 +25,13 @@ function VerifyTab(props) {
   return (
     <div className="w-full">
       <form className="flex flex-col justify-center w-full" onSubmit={(e) => handleSubmit(e)}>
-        {
-          verify.errors && Array.isArray(verify.errors) &&
+        {verify.sending &&
+          <Stack marginBottom={3} sx={{ width: '100%' }} spacing={2}>
+            <Alert severity="success">Verification code has been resent!</Alert>
+          </Stack>
+        }
+
+        {verify.errors && Array.isArray(verify.errors) &&
           <Stack marginBottom={3} sx={{ width: '100%' }} spacing={2}>
             {
               verify.errors.map((error, index) => (
@@ -67,4 +72,4 @@ function VerifyTab(props) {
   );
 }
 
-export default VerifyTab;
+export default OTPLoginTab;

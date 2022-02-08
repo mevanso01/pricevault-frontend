@@ -16,7 +16,10 @@ import _ from '@lodash';
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
+  email: yup
+    .string()
+    .email('You must enter a valid email')
+    .required('You must enter a email'),
   password: yup
     .string()
     .required('Please enter your password.')
@@ -94,6 +97,7 @@ function JWTLoginTab(props) {
                 ),
               }}
               variant="outlined"
+              required
             />
           )}
         />
@@ -139,8 +143,8 @@ function JWTLoginTab(props) {
         >
           {
             login.progress ?
-            'Please wait...':
-            'Login'
+              'Please wait...' :
+              'Login'
           }
         </Button>
       </form>
