@@ -4,8 +4,11 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useHistory } from 'react-router-dom';
 import JWTLoginTab from './tabs/JWTLoginTab';
+import VerifyTab from './tabs/VerifyTab';
+import { resetSlice } from 'app/auth/store/loginSlice';
 
 const Root = styled('div')(({ theme }) => ({
   // background: `linear-gradient(to right, ${theme.palette.primary.dark} 0%, ${darken(
@@ -26,11 +29,24 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 function Login() {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const login = useSelector(({ auth }) => auth.login);
+
   // const [selectedTab, setSelectedTab] = useState(0);
 
   // function handleTabChange(event, value) {
   //   setSelectedTab(value);
   // }
+
+  const handleResendCode = () => {
+    console.log('resend');
+  }
+
+  const backLoginPage = () => {
+    dispatch(resetSlice());
+    history.push('/');
+  }
 
   return (
     <Root className="flex flex-col flex-auto items-center justify-center flex-shrink-0 p-16 md:p-24">
@@ -64,20 +80,28 @@ function Login() {
                 </div>
               </div>
             </motion.div>
-
-            <JWTLoginTab />
+            {login.success ? <VerifyTab /> : <JWTLoginTab />}
           </CardContent>
 
           <div className="flex flex-col items-center justify-center pb-32">
-            <div>
-              <span className="font-normal mr-8">Don't have an account?</span>
-              <Link className="font-normal" to="/register">
-                Register
-              </Link>
-            </div>
-            <Link className="font-normal mt-8" to="/">
+            {login.success ? (
+              <div>
+                <span className="font-normal mr-8">Didn't get a code?</span>
+                <span className="font-normal link-text" onClick={handleResendCode}>
+                  Resend
+                </span>
+              </div>
+            ) : (
+              <div>
+                <span className="font-normal mr-8">Don't have an account?</span>
+                <Link className="font-normal" to="/register">
+                  Register
+                </Link>
+              </div>
+            )}
+            <span className="font-normal link-text mt-8" onClick={backLoginPage}>
               Back to Dashboard
-            </Link>
+            </span>
           </div>
         </Card>
 

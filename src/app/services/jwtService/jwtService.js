@@ -68,6 +68,27 @@ class JwtService extends FuseUtils.EventEmitter {
         .then((response) => {
           const { data } = response;
           if (data.success) {
+            if (!data.enabledVerify) {
+              this.setSession(data.access_token);
+            }
+            resolve(data.user);
+          } else {
+            reject(data.errors);
+          }
+        });
+    });
+  };
+
+  verifyPhoneCode = (userId, code) => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post('/api/auth/verify', {
+          userId,
+          code
+        })
+        .then((response) => {
+          const { data } = response;
+          if (data.success) {
             this.setSession(data.access_token);
             resolve(data.user);
           } else {

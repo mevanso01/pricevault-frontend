@@ -1,30 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { showMessage } from 'app/store/fuse/messageSlice';
-import firebaseService from 'app/services/firebaseService';
 import jwtService from 'app/services/jwtService';
-import { setUserData } from './userSlice';
 
 export const submitLogin =
   ({ email, password }) =>
-  async (dispatch) => {
-    dispatch(setProgress(true));
-    return jwtService
-      .signInWithEmailAndPassword(email, password)
-      .then((user) => {
-        dispatch(setProgress(false));
-        dispatch(setUserData(user));
-        return dispatch(loginSuccess());
-      })
-      .catch((errors) => {
-        dispatch(setProgress(false));
-        return dispatch(loginError(errors));
-      });
-  };
+    async (dispatch) => {
+      dispatch(setProgress(true));
+      return jwtService
+        .signInWithEmailAndPassword(email, password)
+        .then((user) => {
+          dispatch(setProgress(false));
+          dispatch(setUserId(user.data.id));
+          return dispatch(loginSuccess());
+        })
+        .catch((errors) => {
+          dispatch(setProgress(false));
+          return dispatch(loginError(errors));
+        });
+    };
 
 const initialState = {
   success: false,
   progress: false,
   errors: [],
+  userId: ''
 };
 
 const loginSlice = createSlice({
@@ -47,14 +45,18 @@ const loginSlice = createSlice({
       state.success = false;
       state.progress = false;
       state.errors = [];
+      state.userId = '';
     },
     setProgress: (state, action) => {
       state.progress = !!action.payload;
+    },
+    setUserId: (state, action) => {
+      state.userId = action.payload;
     }
   },
   extraReducers: {},
 });
 
-export const { loginSuccess, loginError, resetSlice, setProgress } = loginSlice.actions;
+export const { loginSuccess, loginError, resetSlice, setProgress, setUserId } = loginSlice.actions;
 
 export default loginSlice.reducer;

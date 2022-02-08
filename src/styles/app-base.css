@@ -133,3 +133,14 @@ rect.apexcharts-heatmap-rect:not([val]) {
     font-size: 12px;
     padding: 5px 8px;
 }
+
+.react-code-input {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.link-text {
+    color: #22d3ee;
+    text-decoration: underline;
+    cursor: pointer;
+}
