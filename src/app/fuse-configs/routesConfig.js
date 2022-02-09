@@ -7,13 +7,15 @@ import FuseLoading from '@fuse/core/FuseLoading';
 import Error404Page from 'app/main/404/Error404Page';
 import LoginConfig from 'app/main/login/LoginConfig';
 import RegisterConfig from 'app/main/register/RegisterConfig';
+import ProfileConfig from 'app/main/profile/ProfileConfig';
 
 const routeConfigs = [
   DashboardConfig,
   TradesConfig,
   SubmissionsConfig,
   LoginConfig,
-  RegisterConfig
+  RegisterConfig,
+  ProfileConfig
 ];
 
 const routes = [
@@ -35,6 +37,11 @@ const routes = [
     exact: true,
     path: '/submissions',
     component: () => <Redirect to="/submissions" />,
+  },
+  {
+    exact: true,
+    path: '/profile',
+    component: () => <Redirect to="/profile" />,
   },
   // {
   //   path: '/loading',
